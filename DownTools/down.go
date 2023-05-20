@@ -20,17 +20,17 @@ type DownImage struct {
 
 func (d DownImage) Down(url string) {
 	defer d.Wg.Done()
-	re, _ := http.NewRequest("get", url, nil)
+
+	re, _ := http.NewRequest("", url, nil)
+	fmt.Println(re)
 	//这里需要设置请求头信息
-	//re.Header.Set("User-Agent","")
 	cli := &http.Client{}
 	res, err := cli.Do(re)
-	defer res.Body.Close()
-	fmt.Println(res.StatusCode)
 	if err != nil || res.StatusCode != 200 {
-		log.Fatalln(err)
+		log.Fatalln(res.Status)
 		return
 	}
+	defer res.Body.Close()
 	newFile(res.Body, "jpg")
 }
 
