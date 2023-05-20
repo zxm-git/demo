@@ -1,6 +1,7 @@
 package downtools
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"math/rand"
@@ -11,19 +12,25 @@ import (
 	"time"
 )
 
+var D DownImage
+
 type DownImage struct {
 	Wg *sync.WaitGroup
 }
 
 func (d DownImage) Down(url string) {
-	
+	defer d.Wg.Done()
 	re, _ := http.NewRequest("get", url, nil)
+	//这里需要设置请求头信息
+	//re.Header.Set("User-Agent","")
 	cli := &http.Client{}
 	res, err := cli.Do(re)
-	if err != nil {
-		log.Fatalln(err)
-	}
 	defer res.Body.Close()
+	fmt.Println(res.StatusCode)
+	if err != nil || res.StatusCode != 200 {
+		log.Fatalln(err)
+		return
+	}
 	newFile(res.Body, "jpg")
 }
 
