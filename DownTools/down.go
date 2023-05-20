@@ -41,7 +41,7 @@ func newFile(r io.Reader, imageType string) {
 	//随机
 	rand.Seed(int64(time.Now().Nanosecond()))
 	randStr := strconv.Itoa(rand.Int())
-	f, err := os.Create("./Image/" + randStr + "." + imageType)
+	f, err := os.Create("./image/" + randStr + "." + imageType)
 	if err != nil {
 		log.Fatalln(err)
 	}
